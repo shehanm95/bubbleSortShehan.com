@@ -1,9 +1,11 @@
 let data = [];
 let currentIndex = 0;
 let isTempFull = false;
+let mistakes = 0;
+let sortedBoundary = 8; // Initially, all 8 are unsorted
 
 function init() {
-    data = Array.from({ length: 6 }, () => Math.floor(Math.random() * 50) + 1);
+    data = Array.from({ length: 8 }, () => Math.floor(Math.random() * 50) + 1);
     render();
 }
 
@@ -16,7 +18,8 @@ function render() {
         container.className = 'slot-container';
 
         const slot = document.createElement('div');
-        slot.className = `slot ${i === currentIndex || i === currentIndex + 1 ? 'active' : ''}`;
+        // Class finalized if it's beyond the current sorting boundary
+        slot.className = `slot ${i >= sortedBoundary ? 'finalized' : ''} ${i === currentIndex || i === currentIndex + 1 ? 'active' : ''}`;
         slot.id = `slot-${i}`;
         slot.setAttribute('ondrop', 'drop(event)');
         slot.setAttribute('ondragover', 'allowDrop(event)');
@@ -31,9 +34,10 @@ function render() {
             const isFirst = (i === currentIndex);
             const isSecond = (i === currentIndex + 1);
 
-            if (isFirst && !isTempFull) {
+            // Access logic: only active pair can move, and only if not finalized
+            if (isFirst && !isTempFull && i < sortedBoundary) {
                 el.setAttribute('ondragstart', 'drag(event)');
-            } else if (isSecond && isTempFull) {
+            } else if (isSecond && isTempFull && i < sortedBoundary) {
                 el.setAttribute('ondragstart', 'drag(event)');
             } else {
                 el.classList.add('disabled');
@@ -61,7 +65,7 @@ function drag(ev) {
 function allowDrop(ev) {
     ev.preventDefault();
 }
-// designed by shehan
+
 function drop(ev) {
     ev.preventDefault();
     const dataId = ev.dataTransfer.getData("text");
@@ -70,9 +74,8 @@ function drop(ev) {
     const val = parseInt(draggedEl.textContent);
 
     if (target.id === 'temp-slot' && !isTempFull) {
-        const nextVal = data[currentIndex + 1];
-        if (val <= nextVal) {
-            showError("Wrong Move! No swap needed since " + val + " <= " + nextVal);
+        if (val <= data[currentIndex + 1]) {
+            addMistake("Wrong Move! " + val + " is not larger than " + data[currentIndex + 1]);
             return;
         }
         target.appendChild(draggedEl);
@@ -90,6 +93,14 @@ function drop(ev) {
     render();
 }
 
+function addMistake(text) {
+    mistakes++;
+    showError(text);
+    const mLabel = document.getElementById('mistake-count');
+    mLabel.textContent = `You Have Done ${mistakes} Mistake${mistakes > 1 ? 's' : ''}`;
+    mLabel.classList.remove('hidden');
+}
+
 function showError(text) {
     const errorMsg = document.getElementById('error-msg');
     errorMsg.textContent = text;
@@ -100,34 +111,38 @@ function showError(text) {
 function skipOrNext() {
     if (isTempFull) return;
 
-    // RESTRICTION: Check if a swap was necessary
-    const leftVal = data[currentIndex];
-    const rightVal = data[currentIndex + 1];
-
-    if (leftVal > rightVal) {
-        showError("Restriction: You cannot skip! " + leftVal + " > " + rightVal + ". You must swap.");
+    // Check if swap was mandatory
+    if (data[currentIndex] > data[currentIndex + 1]) {
+        addMistake("Restriction: You must swap " + data[currentIndex] + " and " + data[currentIndex + 1]);
         return;
     }
 
     currentIndex++;
-    if (currentIndex >= 5) currentIndex = 0;
+
+    // If we reached the end of the current unsorted portion
+    if (currentIndex >= sortedBoundary - 1) {
+        currentIndex = 0;
+        sortedBoundary--; // The last item of the round is now officially sorted
+    }
+
+    document.getElementById('message').textContent = `Comparing index ${currentIndex} and ${currentIndex + 1}.`;
     render();
 }
 
 function updateDataArray() {
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 8; i++) {
         const slot = document.getElementById(`slot-${i}`);
         data[i] = slot.children.length > 0 ? parseInt(slot.children[0].textContent) : null;
     }
 }
 
 function checkIfSorted() {
-    const isSorted = data.every((val, i) => i === 0 || val >= data[i - 1]);
+    const isFullySorted = sortedBoundary <= 1;
     const congrats = document.getElementById('congrats-layer');
-    if (isSorted && !data.includes(null)) {
+    if (isFullySorted) {
         congrats.classList.remove('hidden');
-    } else {
-        congrats.classList.add('hidden');
+        // Finalize all remaining slots visually
+        document.querySelectorAll('.slot').forEach(s => s.classList.add('finalized'));
     }
 }
 

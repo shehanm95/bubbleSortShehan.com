@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubble Sort Teacher - Practical ICT</title>
+    <title>Shehan Peiris - Practical ICT</title>
+    <link rel="icon" type="image/x-icon" href="Shehan.ico">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,16 +13,16 @@
 
     <div class="container">
         <h1>Bubble Sort</h1>
-        <!-- designed by Shehan -->
+
         <div id="congrats-layer" class="hidden">
             <h2 class="congrats-text"> Congratulations! </h2>
-            <p>The array is fully sorted!</p>
+            <p>The list is fully sorted!</p>
         </div>
 
         <div id="error-msg" class="error-popup hidden"></div>
 
         <div class="array-wrapper">
-            <span class="label m-2">Int List [6]</span>
+            <span class="label m-2">int List[8]</span>
             <div class="box-row" id="main-array">
             </div>
         </div>
@@ -35,6 +36,7 @@
             <button class="btn btn-next" onclick="skipOrNext()">Skip / Next Pair</button>
             <button class="btn btn-refresh" onclick="location.reload()">New Sort</button>
             <p id="message" class="instruction-text">Drag index 0 to temp if it is larger than index 1.</p>
+            <p id="mistake-count" class="mistake-text hidden"></p>
         </div>
     </div>
 
