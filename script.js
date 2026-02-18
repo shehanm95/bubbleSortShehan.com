@@ -61,7 +61,7 @@ function drag(ev) {
 function allowDrop(ev) {
     ev.preventDefault();
 }
-
+// designed by shehan
 function drop(ev) {
     ev.preventDefault();
     const dataId = ev.dataTransfer.getData("text");

@@ -59,8 +59,9 @@ h1 {
     margin-top: 8px;
     font-size: 0.9rem;
     color: rgba(109, 248, 246, 0.506);
-    /* Your custom color */
 }
+
+/* designed by Shehan Peiris */
 
 .element {
     width: 60px;
@@ -93,6 +94,8 @@ h1 {
     font-weight: bold;
     width: fit-content;
 }
+
+/* designed by Shehan Peiris */
 
 #congrats-layer {
     border: 2px solid #00ff00;
@@ -175,6 +178,8 @@ footer {
         height: 60px;
     }
 }
+
+/* designed by Shehan Peiris */
 
 .m-2 {
     display: inline-block;
