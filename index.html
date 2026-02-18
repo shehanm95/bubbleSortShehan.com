@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Sort Teacher - Practical ICT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Bubble Sort</h1>
+
+        <div id="congrats-layer" class="hidden">
+            <h2 class="congrats-text"> Congratulations! </h2>
+            <p>The array is fully sorted!</p>
+        </div>
+
+        <div id="error-msg" class="error-popup hidden"></div>
+
+        <div class="array-wrapper">
+            <span class="label m-2">Int List [6]</span>
+            <div class="box-row" id="main-array">
+            </div>
+        </div>
+
+        <div class="temp-area">
+            <span class="label">int temp</span>
+            <div class="temp-slot" id="temp-slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-next" onclick="skipOrNext()">Skip / Next Pair</button>
+            <button class="btn btn-refresh" onclick="location.reload()">New Sort</button>
+            <p id="message" class="instruction-text">Drag index 0 to temp if it is larger than index 1.</p>
+        </div>
+    </div>
+
+    <footer>
+        Created by Shehan Peris - Practical ICT
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
